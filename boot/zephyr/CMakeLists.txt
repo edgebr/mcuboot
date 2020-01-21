@@ -6,6 +6,8 @@
 
 cmake_minimum_required(VERSION 3.8.2)
 
+set(BOARD_ROOT ${CMAKE_SOURCE_DIR})
+
 # Board-specific CONF_FILES should get merged into the build as well.
 # Default to qemu_x86 if no board has been specified.
 set(BOARD qemu_x86)
