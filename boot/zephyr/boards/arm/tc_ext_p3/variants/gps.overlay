@@ -1,0 +1,6 @@
+&usart3 { // GPS
+	current-speed = <115200>;
+	pinctrl-0 = <&usart3_pins_c>;
+	pinctrl-names = "default";
+ 	status = "ok";
+};

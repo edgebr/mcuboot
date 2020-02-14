@@ -1,0 +1,34 @@
+# Kconfig - TC Ext P3 board configuration
+#
+
+if BOARD_TC_EXT_P3
+
+config TC_HAS_GPS
+	bool "Enable GPS on this board variant"
+	select UART_3
+	default n
+
+config TC_HAS_ACCELEROMETER
+	bool "Enable accelerometer on this board variant"
+	select I2C 
+	select I2C_1
+	default n
+
+config TC_USER_DEBUG
+	bool "Enable user debug uart on this board"
+	select UART_4
+	default n
+
+config TC_VARIANT_RS485
+	bool "Enable user debug uart on this board"
+	default n
+
+config TC_FW_UPDATE
+	bool "Consider the bootloader is present and enables firmware to load a new image from cable."
+	default n
+
+config TC_JIGA_REF
+       bool "Flag usada para compilar o código para usar o extensor como placa de refência na jiga de teste."
+       default n
+
+endif # BOARD_TC_EXT_P3

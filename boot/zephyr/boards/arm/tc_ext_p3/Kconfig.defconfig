@@ -1,0 +1,69 @@
+# Kconfig - TC_EXT_P3 board configuration
+#
+# Copyright (c) 2018 Trucks Control
+#
+
+if BOARD_TC_EXT_P3
+
+config BOARD
+	default "tc_ext_p3"
+
+# GPS
+config UART_3
+	default n
+
+
+# Bluetooth
+config UART_2
+	default y
+
+
+config UART_4
+	default n
+
+# RS232/RS485
+config UART_5
+	default y
+
+# LoRa 
+config UART_6
+	default y
+
+config USE_STM32_HAL_PWR
+	default y
+
+config RS485
+	bool
+	default n
+
+if I2C
+
+config I2C_1
+	default y
+
+endif # I2C
+
+if SPI
+
+config SPI_1
+	default y
+
+endif # SPI
+
+if PWM
+
+config PWM_STM32_2
+	default y
+
+endif # PWM
+
+config USB
+	default n
+
+config USB_DEVICE_STACK
+	default n
+
+config USB_DEVICE_NETWORK_ECM
+	default n
+
+endif # TC_EXT_P1

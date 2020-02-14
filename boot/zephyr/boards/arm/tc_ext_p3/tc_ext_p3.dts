@@ -1,0 +1,244 @@
+/*
+ * Copyright (c) 2018 Truck Control
+ *
+ */
+
+/dts-v1/;
+#include <st/f4/stm32f413Xh.dtsi>
+
+/ {
+	soc {
+		pinctrl: pin-controller@40020000 {
+			usart2_pins_b: usart2 {
+				rx_tx {
+					rx = <STM32_PIN_PA3 (STM32_PINMUX_ALT_FUNC_7 | STM32_PUSHPULL_PULLUP)>;
+					tx = <STM32_PIN_PA2 (STM32_PINMUX_ALT_FUNC_7 | STM32_PUSHPULL_NOPULL)>;
+				};
+			};
+            usart3_pins_c: usart3 {
+				rx_tx {
+					rx = <STM32_PIN_PC5 (STM32_PINMUX_ALT_FUNC_7 | STM32_PUSHPULL_NOPULL)>;
+					tx = <STM32_PIN_PB10 (STM32_PINMUX_ALT_FUNC_7 | STM32_PUSHPULL_PULLUP)>;
+				};
+			};
+			uart4_pins_c: uart4 {
+				rx_tx {
+					rx = <STM32_PIN_PA11 (STM32_PINMUX_ALT_FUNC_11 | STM32_PUSHPULL_NOPULL)>;
+					tx = <STM32_PIN_PA12 (STM32_PINMUX_ALT_FUNC_11 | STM32_PUSHPULL_PULLUP)>;
+				};
+			};
+            uart5_pins_a: uart5 {
+				rx_tx {
+					rx = <STM32_PIN_PD2 (STM32_PINMUX_ALT_FUNC_8 | STM32_PUSHPULL_PULLUP)>;
+					tx = <STM32_PIN_PC12 (STM32_PINMUX_ALT_FUNC_8 | STM32_PUSHPULL_NOPULL)>;
+				};
+			};
+		};
+	};
+};
+
+/ {
+	model = "Trucks Control Extensor Board Prototype 02";
+	compatible = "st,stm32f413";
+
+	chosen {
+		zephyr,console = &uart5;
+		zephyr,shell-uart = &uart5;
+		zephyr,uart-mcumgr = &uart5;
+		zephyr,uart-pipe = &uart5;
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &primary_slot_partition;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		green_led_1: led {
+			gpios = <&gpiob 13 GPIO_DIR_OUT>;
+			label = "LED";
+		};
+	};
+
+	gpio_keys {
+		compatible = "gpio-keys";
+		general_reset_button: main0 {
+			label = "GENERAL RESET";
+			gpios = <&gpiob 12 (GPIO_DIR_IN | GPIO_INT | GPIO_PUD_PULL_UP | GPIO_INT_EDGE | GPIO_INT_ACTIVE_HIGH)>;
+		};
+		truck_ignition: main1 {
+			label = "IGNITION";
+			gpios = <&gpiob 9 (GPIO_DIR_IN | GPIO_INT | GPIO_PUD_PULL_UP | GPIO_INT_EDGE | GPIO_INT_DOUBLE_EDGE | GPIO_INT_DEBOUNCE)>;
+		};
+		truck_external_sensor: main2 {
+			label = "EXTERNAL SENSOR";
+			gpios = <&gpiob 8 (GPIO_DIR_IN | GPIO_INT | GPIO_PUD_PULL_UP | GPIO_INT_EDGE | GPIO_INT_DOUBLE_EDGE | GPIO_INT_DEBOUNCE)>;
+		};
+		truck_invalid_rs232: main3 {
+			label = "INVALID RS232";
+			gpios = <&gpioc 11 (GPIO_DIR_IN | GPIO_INT | GPIO_PUD_PULL_UP | GPIO_INT_EDGE | GPIO_INT_DOUBLE_EDGE | GPIO_INT_DEBOUNCE)>;
+		};
+		lora_reset: lora0 {
+			label = "LORA RESET";
+			gpios = <&gpioc 8 GPIO_DIR_OUT>;
+		};
+		lora_boot0: lora1 {
+			label = "LORA BOOT0";
+			gpios = <&gpioc 9 GPIO_DIR_OUT>;
+		};
+		lora_wakeup: lora2 {
+			label = "LORA WAKEUP";
+			gpios = <&gpiob 15 GPIO_DIR_OUT>;
+		};
+		bluetooth_reset: bluetooth0 {
+			label = "BLUETOOTH RESET";
+			gpios = <&gpioa 1 GPIO_DIR_OUT>;
+		};
+		bluetooth_hangup: bluetooth1 {
+			label = "BLUETOOTH HANGUP";
+			gpios = <&gpioa 0 GPIO_DIR_OUT>;
+		};
+		gps_reset: gps0 {
+			label = "GPS RESET";
+			gpios = <&gpiob 1 GPIO_DIR_OUT>;
+		};
+		gps_wakeup: gps1 {
+			label = "GPS WAKEUP";
+			gpios = <&gpiob 0 GPIO_DIR_OUT>;
+		};
+		bq_pgood: battery0 {
+			label = "BQ PGOOD";
+			gpios = <&gpioa 8 GPIO_DIR_IN>;
+		};
+		bq_chg: battery1 {
+			label = "BQ CHG";
+			gpios = <&gpioa 10 (GPIO_DIR_IN | GPIO_INT | GPIO_PUD_PULL_UP | GPIO_INT_EDGE | GPIO_INT_DOUBLE_EDGE | GPIO_INT_DEBOUNCE)>;
+		};
+		acc_int1: acc0 {
+			label = "ACC INT1";
+			gpios = <&gpiob 5 (GPIO_DIR_IN | GPIO_INT | GPIO_PUD_PULL_UP | GPIO_INT_EDGE | GPIO_INT_ACTIVE_HIGH | GPIO_INT_DEBOUNCE)>;
+		};
+		acc_int2: acc1 {
+			label = "ACC INT2";
+			gpios = <&gpiob 4 (GPIO_DIR_IN | GPIO_INT | GPIO_PUD_PULL_UP | GPIO_INT_EDGE | GPIO_INT_ACTIVE_HIGH | GPIO_INT_DEBOUNCE)>;
+		};
+		rs485_dir: rs485 {
+			label = "RS485 DIR";
+			gpios = <&gpioc 10 GPIO_DIR_OUT>;
+		};
+
+	};
+
+	aliases {
+		led0 = &green_led_1;
+		general-reset = &general_reset_button;
+		ignition = &truck_ignition;
+		external-sensor = &truck_external_sensor;
+		invalid-rs232 = &truck_invalid_rs232;
+		lora-reset = &lora_reset;
+		lora-boot0 = &lora_boot0;
+		lora-wakeup = &lora_wakeup;
+		bluetooth-reset = &bluetooth_reset;
+		bluetooth-hangup = &bluetooth_hangup;
+		gps-reset = &gps_reset;
+		gps-wakeup = &gps_wakeup;
+		bq-pgood = &bq_pgood;
+		bq-chg = &bq_chg;
+		acc-int1 = &acc_int1;
+		acc-int2 = &acc_int2;
+		rs485-dir=&rs485_dir;
+	};
+};
+
+&usart2 { // Bluetooth
+	current-speed = <115200>;
+	pinctrl-0 = <&usart2_pins_a>;
+	pinctrl-names = "default";
+	status = "ok";
+};
+
+&usart3 { // GPS
+	current-speed = <115200>;
+	pinctrl-0 = <&usart3_pins_c>;
+	pinctrl-names = "default";
+    status = "ok";
+};
+
+&uart4 { // User Debug
+	current-speed = <115200>;
+	pinctrl-0 = <&uart4_pins_c>;
+	pinctrl-names = "default";
+};
+
+&uart5 { // RS232/RS485
+	current-speed = <115200>;
+	pinctrl-0 = <&uart5_pins_a>;
+	pinctrl-names = "default";
+	status = "ok";
+};
+
+&usart6 { // LoRa
+	current-speed = <9600>;
+	pinctrl-0 = <&usart6_pins_a>;
+	pinctrl-names = "default";
+	status = "ok";
+};
+
+&timers2 {
+	status = "ok";
+};
+
+&idwg {
+	status = "ok";
+};
+
+&rtc {
+	status = "ok";
+};
+
+&flash0 {
+	/*
+	 * For more information, see:
+	 * http://docs.zephyrproject.org/latest/devices/dts/flash_partitions.html
+	 * Partitions defined based on the official documentation:
+	 * https://www.st.com/content/ccc/resource/technical/document/reference_manual/group0/81/ea/88/1f/97/9e/4a/d0/DM00305666/files/DM00305666.pdf/jcr:content/translations/en.DM00305666.pdf
+	 *
+	 */
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		/* Boot partition 
+		    - Sectors 0 up to 2 (16KB each) */
+		boot_partition: partition@0 {
+			label = "mcuboot";
+			reg = <0x00000000 0xc000>;
+			read-only;
+		};
+		/* Storage partition 
+		    - Sectors 3 (16KB) + sector 4 (64KB) -> 16 + 64 = 80KB */
+		storage_partition: partition@C000 { 
+			label = "storage";
+			reg = <0x000C000 0x14000>;
+		};
+		/* Primary partition (code partition) 
+		    - Sectors 5 up to 9 (128KB each) -> 5*128KB = 640KB */
+		primary_slot_partition: partition@20000 { 
+			label = "image-0";
+			reg = <0x00020000 0xA0000>;
+		};
+		/* Primary partition (code partition) 
+		    - Sectors 10 up to 14 (128KB each) -> 5*128KB = 640KB */
+		secondary_slot_partition: partition@C0000 { 
+			label = "image-1";
+			reg = <0x000C0000 0xA0000>;
+		};
+		/* Scratch partition
+		    - Sector 15 (128KB) -> 128KB 
+		 NOTE: It enables 2000 firmware updates */
+		scratch_partition: partition@160000 { 
+			label = "image-scratch";
+			reg = <0x0160000 0x20000>;
+		};
+	};
+};
