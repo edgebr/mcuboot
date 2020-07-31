@@ -177,7 +177,7 @@
 };
 
 &usart6 { // LoRa
-	current-speed = <9600>;
+	current-speed = <57600>;
 	pinctrl-0 = <&usart6_pins_a>;
 	pinctrl-names = "default";
 	status = "ok";
