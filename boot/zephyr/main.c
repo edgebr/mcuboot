@@ -321,6 +321,8 @@ void main(void)
 
     MCUBOOT_WATCHDOG_FEED();
 
+    printk("Hello World\n");
+
     BOOT_LOG_INF("Starting bootloader");
 
     os_heap_init();
